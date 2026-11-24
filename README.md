@@ -1,3 +1,7 @@
+[![make.fun · news-image-20261123](https://make.fun/badge/news-image-20261123.svg)](https://make.fun/bounty/news-image-20261123?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261123)
+[![rank](https://make.fun/badge/news-image-20261123/PatrickNoFilter/news-image-20261123-v3/rank.svg)](https://make.fun/bounty/news-image-20261123/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261123)
+[![reward](https://make.fun/badge/news-image-20261123/PatrickNoFilter/news-image-20261123-v3/reward.svg)](https://make.fun/bounty/news-image-20261123?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261123)
+
 # The World in One Image — 23 November 2026
 
 A deterministic Python/Pillow program that renders a 1024x1024 news summary image for Monday, 23 November 2026. Every pixel is generated from the constants in `main.py`, so rerunning the program always produces the identical `entry.png`.
