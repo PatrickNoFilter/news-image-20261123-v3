@@ -12,6 +12,17 @@ WHITE = "#F6F8FC"
 MUTED = "#A9B6D0"
 AMBER = "#F3B64B"
 
+# One palette, used by cards, stats, bullets and the key so a colour always
+# means the same thing wherever it appears in the image.
+CLIMATE = "#E8B24C"
+CONFLICT = "#E46965"
+EUROPE = "#8E9BF6"
+AMERICAS = "#6BCB9A"
+ASIA = "#4FC3D9"
+AFRICA = "#D98CB3"
+SCIENCE = "#63C7B2"
+CULTURE = "#C792EA"
+
 FONTS = {
     "regular": "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
     "bold": "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
@@ -131,31 +142,51 @@ def icon(img, cx, cy, kind, color, size=38):
 
 
 HEROES = [
-    ("CLIMATE", "COP31 ends with no deal", "Longest UN climate summit, Antalya", "#E8B24C", "gavel"),
-    ("UKRAINE", "Dnipro strike kills 11", "Boy, 7, pulled alive from rubble", "#E46965", "drones"),
-    ("US POLITICS", "Democrats win the House", "258 seats, best since 1992", "#6BCB9A", "house"),
+    ("CLIMATE", "COP31 ends with no deal", "Longest UN climate summit, Antalya", CLIMATE, "gavel"),
+    ("UKRAINE", "Dnipro strike kills 11", "Boy, 7, pulled alive from rubble", CONFLICT, "drones"),
+    ("US POLITICS", "Democrats win the House", "258 seats, best since 1992", AMERICAS, "house"),
 ]
 
 GRID = [
-    ("EUROPE", "Belgium flights grounded", "Strike against austerity measures", "#8E9BF6", "plane"),
-    ("BALTIC", "Ship attacked in Gulf of Finland", "Ukraine likely behind drone strike", "#E46965", "ship"),
-    ("ASIA", "Korea exam chief resigns", "Chaos over AI-cheating measures", "#4FC3D9", "exam"),
-    ("CULTURE", "Miley Cyrus marries Maxx Morando", "California ceremony, four years together", "#C792EA", "rings"),
-    ("US", "Iowa explosives to be detonated", "Army defies court order", "#E8B24C", "blast"),
-    ("AFRICA", "Nigeria boat tragedy rescue race", "Overcrowding and missing life jackets", "#D98CB3", "boat"),
-    ("SCIENCE", "Mercury gets first visitors", "Two spacecraft enter orbit", "#63C7B2", "space"),
-    ("CULTURE", "Ancient library opens in Rome", "Restored after years of work", "#4FC3D9", "book"),
+    ("EUROPE", "Belgium flights grounded", "Strike against austerity measures", EUROPE, "plane"),
+    ("BALTIC", "Ship attacked in Gulf of Finland", "Ukraine likely behind drone strike", CONFLICT, "ship"),
+    ("ASIA", "Korea exam chief resigns", "Chaos over AI-cheating measures", ASIA, "exam"),
+    ("CULTURE", "Miley Cyrus marries Maxx Morando", "California ceremony, four years together", CULTURE, "rings"),
+    ("US", "Iowa explosives to be detonated", "Army defies court order", AMERICAS, "blast"),
+    ("AFRICA", "Nigeria boat tragedy rescue race", "Overcrowding and missing life jackets", AFRICA, "boat"),
+    ("SCIENCE", "Mercury gets first visitors", "Two spacecraft enter orbit", SCIENCE, "space"),
+    ("CULTURE", "Ancient library opens in Rome", "Restored after years of work", CULTURE, "book"),
 ]
 
+# Each stat is tied to a real story and carries that story's accent colour.
+STATS = [
+    ("11", "killed in Dnipro strike", CONFLICT),
+    ("258", "House seats won", AMERICAS),
+    ("2", "spacecraft at Mercury", SCIENCE),
+    ("19", "stories in one image", CLIMATE),
+]
+
+# Bullet colour follows the same key as the cards above.
 MORE = [
-    ("FRANCE", "Street protests over reforms — Macron blames the radical left"),
-    ("PENTAGON", "More UFO footage declassified — eighth tranche includes three videos"),
-    ("MARKETS", "Anthropic record IPO — charities prepare for windfall"),
-    ("HEALTH", "Virginia reports measles death — first young child death in 2026"),
-    ("CANADA", "Carney jokes at press dinner — fake Trump draws laughs"),
-    ("SEATTLE", "Two passengers detained by ICE — family baptism trip, lawyer says"),
-    ("SPORT", "NFL analyst Tom Jackson dies — Broncos star and analyst was 75"),
-    ("DIPLOMACY", "Kenya, DR Congo restore ties — leaders pledge non-interference"),
+    (EUROPE, "Street protests over reforms — Macron blames the radical left"),
+    (AMERICAS, "More UFO footage declassified — eighth tranche includes three videos"),
+    (CLIMATE, "Anthropic record IPO — charities prepare for windfall"),
+    (CONFLICT, "Virginia reports measles death — first young child death in 2026"),
+    (AMERICAS, "Carney jokes at press dinner — fake Trump draws laughs"),
+    (AMERICAS, "Two passengers detained by ICE — family baptism trip, lawyer says"),
+    (CULTURE, "NFL analyst Tom Jackson dies — Broncos star and analyst was 75"),
+    (AFRICA, "Kenya, DR Congo restore ties — leaders pledge non-interference"),
+]
+
+KEY = [
+    ("CLIMATE / MARKETS", CLIMATE),
+    ("UKRAINE / BALTIC", CONFLICT),
+    ("EUROPE", EUROPE),
+    ("AMERICAS", AMERICAS),
+    ("ASIA / PACIFIC", ASIA),
+    ("AFRICA", AFRICA),
+    ("SCIENCE", SCIENCE),
+    ("CULTURE / SPORT", CULTURE),
 ]
 
 
@@ -164,64 +195,58 @@ def build():
     d = ImageDraw.Draw(img)
 
     d.rectangle((0, 0, W, 7), fill=AMBER)
-    text(d, (40, 26), "THE WORLD IN ONE IMAGE  ·  MONDAY EDITION", 17, MUTED, True)
-    text(d, (38, 56), "23 NOVEMBER 2026", 74, WHITE, True)
-    d.line((40, 146, 984, 146), fill=BORDER, width=3)
+    text(d, (40, 22), "THE WORLD IN ONE IMAGE  ·  MONDAY EDITION", 15, MUTED, True)
+    text(d, (38, 44), "23 NOVEMBER 2026", 54, WHITE, True)
+    text(d, (984, 56), "ONE DAY  ·  ONE IMAGE", 14, MUTED, False, "ra")
+    d.line((40, 116, 984, 116), fill=BORDER, width=3)
 
     cw, gap = 312, 12
     for i, (tag, head, sub, col, ico) in enumerate(HEROES):
         x = 40 + i * (cw + gap)
-        panel(d, (x, 162, x + cw, 326), col)
-        d.rectangle((x + 1, 163, x + cw - 1, 170), fill=col)
-        text(d, (x + 18, 182), tag, 15, col, True)
-        icon(img, x + cw - 38, 200, ico, col, 36)
-        wrapped = wrap(d, head, 24, cw - 36, True)
-        multiline(d, (x + 18, 212), wrapped, 24, WHITE, True, 1)
-        text(d, (x + 18, 292), sub, 14, MUTED)
+        panel(d, (x, 130, x + cw, 298), col)
+        d.rectangle((x + 1, 131, x + cw - 1, 137), fill=col)
+        text(d, (x + 18, 148), tag, 15, col, True)
+        icon(img, x + cw - 34, 162, ico, col, 28)
+        wrapped = wrap(d, head, 23, cw - 36, True)
+        multiline(d, (x + 18, 180), wrapped, 23, WHITE, True, 1)
+        text(d, (x + 18, 252), sub, 13, MUTED)
 
-    stats = [("11", "killed in Dnipro strike"), ("258", "House seats won"),
-             ("19", "stories, 7 regions"), ("1", "day: 23 Nov 2026")]
     sw = (944 - 3 * 10) // 4
-    for i, (num, lab) in enumerate(stats):
+    for i, (num, lab, col) in enumerate(STATS):
         x = 40 + i * (sw + 10)
-        panel(d, (x, 338, x + sw, 402), radius=10)
-        text(d, (x + 14, 350), num, 30, AMBER, True)
-        text(d, (x + 14, 386), lab, 13, MUTED)
+        panel(d, (x, 310, x + sw, 368), col, radius=10)
+        text(d, (x + 16, 320), num, 28, col, True)
+        text(d, (x + 16, 351), lab, 13, MUTED)
 
-    gx0, gy0, gw, gh, vgap = 40, 414, 462, 78, 8
+    gx0, gy0, gw, gh, vgap = 40, 382, 462, 80, 8
     for i, (tag, head, sub, col, ico) in enumerate(GRID):
         x = gx0 + (i % 2) * (gw + 20)
         y = gy0 + (i // 2) * (gh + vgap)
         panel(d, (x, y, x + gw, y + gh), col)
         text(d, (x + 18, y + 8), tag, 12, col, True)
-        icon(img, x + gw - 36, y + 26, ico, col, 30)
-        wrapped = wrap(d, head, 19, gw - 70, True)
+        icon(img, x + gw - 32, y + 22, ico, col, 26)
+        wrapped = wrap(d, head, 19, gw - 36, True)
         multiline(d, (x + 18, y + 26), wrapped, 19, WHITE, True, 0)
-        text(d, (x + 18, y + 56), sub, 13, MUTED)
+        lines = len(wrapped.split("\n"))
+        text(d, (x + 18, y + 28 + lines * 21), sub, 13, MUTED)
 
-    panel(d, (40, 752, 620, 962), radius=12)
-    text(d, (58, 766), "ALSO ON MONDAY", 19, AMBER, True)
-    for i, (tag, line) in enumerate(MORE):
-        y = 800 + i * 19
-        d.ellipse((58, y + 4, 66, y + 12), fill=["#8E9BF6", "#E46965", "#4FC3D9", "#C792EA"][i % 4])
+    panel(d, (40, 742, 620, 966), radius=12)
+    text(d, (58, 754), "ALSO ON MONDAY", 18, AMBER, True)
+    for i, (col, line) in enumerate(MORE):
+        y = 788 + i * 20
+        d.ellipse((58, y + 4, 66, y + 12), fill=col)
         text(d, (76, y), line, 14, WHITE)
 
-    panel(d, (640, 752, 984, 962), radius=12)
-    text(d, (658, 766), "REGIONS COVERED", 19, AMBER, True)
-    regions = [
-        ("EUROPE", "#8E9BF6"), ("UKRAINE / BALTIC", "#E46965"),
-        ("AFRICA", "#D98CB3"), ("ASIA / PACIFIC", "#4FC3D9"),
-        ("AMERICAS", "#6BCB9A"), ("SCIENCE / CULTURE", "#C792EA"),
-        ("CLIMATE / MARKETS", "#E8B24C"),
-    ]
-    for i, (name, col) in enumerate(regions):
-        y = 802 + i * 21
+    panel(d, (640, 742, 984, 966), radius=12)
+    text(d, (658, 754), "COLOUR KEY", 18, AMBER, True)
+    for i, (name, col) in enumerate(KEY):
+        y = 788 + i * 20
         d.rounded_rectangle((658, y + 3, 670, y + 15), radius=3, fill=col)
-        text(d, (680, y), name, 15, WHITE)
+        text(d, (680, y), name, 14, WHITE)
 
-    text(d, (40, 976),
+    text(d, (40, 980),
          "All stories happened or were first reported on Monday 23 November 2026. One day, one image.",
-         14, MUTED)
+         13, MUTED)
 
     out_dir = "/output"
     try:
